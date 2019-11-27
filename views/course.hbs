@@ -1,0 +1,13 @@
+
+{{#if course}}
+  {{#with course}}
+  <div class="course">
+    <h1>{{title}}</h1>
+    <img src="{{img}}" alt="{{title}}">
+    <p class="price big">{{price}}</p>
+  </div>
+  {{/with}}
+{{else}}
+  <p>Данного курса не существует либо он был удален.</p>
+  <a href="/">Вернуться на главную</a>
+{{/if}}
