@@ -3,7 +3,7 @@
 {{#if courses.length}}
   {{#each courses}}
     <div class="row">
-      <div class="col s6 offset-s3">
+      <div class="col s12 l10 xl8 offset-l1 offset-xl2">
         <div class="card">
           <div class="card-image">
             <img src="{{img}}" alt="{{title}}">
@@ -12,9 +12,15 @@
             <span class="card-title">{{title}}</span>
             <p class="price">{{price}}</p>
           </div>
-          <div class="card-action">
-            <a href="/courses/{{id}}">Подробнее</a>
-            <a href="/courses/{{id}}/edit?allow=true">Редактировать</a>
+          <div class="card-action actions">
+            <div>
+              <a href="/courses/{{id}}">Подробнее</a>
+              <a href="/courses/{{id}}/edit?allow=true">Редактировать</a>
+            </div>
+            <form action="/card/add" method="POST">
+              <input type="hidden" name="id" value="{{id}}">
+              <button type="submit" class="btn btn-primary">Купить</button>
+            </form>
           </div>
         </div>
       </div>
