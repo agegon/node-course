@@ -12,10 +12,18 @@ router.post('/add', async (req, res) => {
 
 router.get('/', async (req, res) => {
   const card = await Card.getCard();
+  const courses = await Promise.all(card.courses.map(async crs => {
+    course = await Course.getById(crs.id);
+    if (course) {
+      course.count = crs.count;
+      return course;
+    }
+  }));
+  
   res.render('card', {
     title: 'Корзина',
     isCard: true,
-    courses: card.courses,
+    courses: courses,
     price: card.price,
   })
 })
