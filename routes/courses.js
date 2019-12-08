@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 router.get('/add', (req, res) => {
   res.render(
     'add', 
-    { title: 'Добавить курс', isAdd: true }
+    { title: 'Добавить курс', isAdd: true, course: {} }
   );
 })
 
@@ -23,6 +23,28 @@ router.post('/add', async (req, res) => {
   await course.save();
 
   res.redirect('/courses');
+})
+
+router.get('/:id/edit', async (req, res) => {
+  if (!req.query.allow) {
+    return res.redirect('/');
+  }
+
+  const course = await Course.getById(req.params.id);
+
+  res.render(
+    'add', 
+    { title: 'Редактирование курса', course }
+  );
+})
+
+router.post('/:id/edit', async (req, res) => {
+  if (req.query.allow) {
+    const course = new Course(req.body);
+    await course.update(req.params.id);
+  }
+
+  return res.redirect('/courses');
 })
 
 router.get('/:id', async (req, res) => {

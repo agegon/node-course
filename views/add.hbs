@@ -1,19 +1,29 @@
-<h1>Добавить курс</h1>
+{{#if isAdd}}
+  <h1>Добавить курс</h1>
+{{else}}
+  <h1>Редактирование курса {{course.title}}</h1>
+{{/if}}
 
-<form action="/courses/add" method="POST">
+{{#with course}}
+{{#if id}}
+  <form action="/courses/{{id}}/edit?allow=true" method="POST">
+{{else}}
+  <form action="/courses/add" method="POST">
+{{/if}}
   <div class="input-field">
-    <input id="title" name="title" type="text" class="validate" required>
+    <input id="title" name="title" type="text" class="validate" value="{{title}}" required>
     <label for="title">Название курса</label>
     <span class="helper-text" data-error="Введите название"></span>
   </div>
   <div class="input-field">
-    <input id="price" name="price" type="number" class="validate" required>
+    <input id="price" name="price" type="number" class="validate" value="{{price}}" required>
     <label for="price">Цена курса</label>
     <span class="helper-text" data-error="Введите цену"></span>
   </div>
   <div class="input-field">
-    <input id="img" name="img" type="text" class="validate">
+    <input id="img" name="img" type="text" class="validate" value="{{img}}">
     <label for="img">Url картинки</label>
   </div>
   <button class="btn btn-primary" type="submit">Сохранить</button>
 </form>
+{{/with}}
