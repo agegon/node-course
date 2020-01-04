@@ -10,6 +10,12 @@ router.post('/add', async (req, res) => {
   res.redirect('/courses');
 })
 
+router.delete('/:id', async (req, res) => {
+  const course = await Course.getById(req.params.id);
+  const card = await Card.remove(course);
+  res.json(card);
+})
+
 router.get('/', async (req, res) => {
   const card = await Card.getCard();
   const courses = await Promise.all(card.courses.map(async crs => {

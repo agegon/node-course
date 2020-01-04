@@ -44,6 +44,22 @@ class Card {
     Card.saveCard(card);    
   }
 
+  static async remove({ id, price }) {
+    id = Number(id);
+    const card = await Card.getCard();
+    const idx = card.courses.findIndex(item => item.id === id );
+    if (idx !== -1) {
+      if (card.courses[idx].count === 1) {
+        card.courses = card.courses.filter(item => item.id !== id);
+      } else {
+        card.courses[idx].count--;
+      }
+      card.price -= Number(price);
+      Card.saveCard(card);
+    }
+    return card;
+  }
+
   static async saveCard(card) {
     return new Promise((resolve, reject) => {
       fs.writeFile(cardPath, JSON.stringify(card), err => {

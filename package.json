@@ -8,7 +8,9 @@
     "dev": "nodemon index.js"
   },
   "nodemonConfig": {
-    "ignore": ["data/**/*"]
+    "ignore": [
+      "data/**/*"
+    ]
   },
   "author": "",
   "license": "ISC",
