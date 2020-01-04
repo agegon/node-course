@@ -13,13 +13,20 @@ router.post('/add', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   const course = await Course.getById(req.params.id);
   const card = await Card.remove(course);
-  res.json(card);
+  const courses = await Promise.all(card.courses.map(async crs => {
+    const course = await Course.getById(crs.id);
+    if (course) {
+      course.count = crs.count;
+      return course;
+    }
+  }));
+  res.json({ ...card, courses });
 })
 
 router.get('/', async (req, res) => {
   const card = await Card.getCard();
   const courses = await Promise.all(card.courses.map(async crs => {
-    course = await Course.getById(crs.id);
+    const course = await Course.getById(crs.id);
     if (course) {
       course.count = crs.count;
       return course;
