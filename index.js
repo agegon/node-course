@@ -22,9 +22,13 @@ async function start() {
   try {
     const url = 'mongodb://localhost:27017/courses_shop';
     await mongoose.connect(url, { 
-      useNewUrlParser: true, 
+      useNewUrlParser: true,
+      useFindAndModify: false, 
       useUnifiedTopology: true 
     });
+
+    const db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
 
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
