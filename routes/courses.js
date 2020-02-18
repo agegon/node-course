@@ -19,10 +19,18 @@ router.get('/add', (req, res) => {
 })
 
 router.post('/add', async (req, res) => {
-  const course = new Course(req.body);
-  await course.save();
+  try {
+    const course = new Course({
+      title: req.body.title,
+      price: req.body.price,
+      img: req.body.img
+    });
 
-  res.redirect('/courses');
+    await course.save();
+    res.redirect('/courses');
+  } catch (err) {
+    console.log(err);
+  }
 })
 
 router.get('/:id/edit', async (req, res) => {
