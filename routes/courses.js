@@ -4,7 +4,7 @@ const Course = require('../models/course');
 const router = Router();
 
 router.get('/', async (req, res) => {
-  const courses = await Course.find();
+  const courses = await Course.find().populate('user', 'email name');
   res.render(
     'courses', 
     { title: 'Список курсов', isCourses: true, courses }
@@ -23,7 +23,8 @@ router.post('/add', async (req, res) => {
     const course = new Course({
       title: req.body.title,
       price: req.body.price,
-      img: req.body.img
+      img: req.body.img,
+      user: req.user
     });
 
     await course.save();

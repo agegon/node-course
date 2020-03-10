@@ -1,9 +1,9 @@
 <h1>Курсы</h1>
 
 {{#if courses.length}}
-  {{#each courses}}
-    <div class="row">
-      <div class="col s12 l10 xl8 offset-l1 offset-xl2">
+  <div class="row">
+    {{#each courses}}
+      <div class="col s12 m8 l6 xl4">
         <div class="card">
           <div class="card-image">
             <img src="{{img}}" alt="{{title}}">
@@ -24,8 +24,8 @@
           </div>
         </div>
       </div>
-    </div>
-  {{/each}}
+    {{/each}}
+  </div>
 {{else}}
   <p>Курсы скоро будут добавлены.</p>
 {{/if}}
