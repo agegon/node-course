@@ -9,14 +9,14 @@ const user = new Schema({
     type: String,
     required: true
   },
-  card: {
+  cart: {
     items: [{
       count: {
         type: Number,
         required: true,
         default: 1,
       },
-      courseId: {
+      course: {
         type: Schema.Types.ObjectId,
         required: true,
         ref: 'Course'
