@@ -23,20 +23,18 @@ router.delete('/:id', async (req, res) => {
 })
 
 router.get('/', async (req, res) => {
-  const card = await Card.getCard();
-  const courses = await Promise.all(card.courses.map(async crs => {
-    const course = await Course.getById(crs.id);
-    if (course) {
-      course.count = crs.count;
-      return course;
-    }
-  }));
+  const user = await req.user
+    .populate('cart.items.course')
+    .execPopulate();
+
+  const courses = user.cart.items.map(item => ({ ...item.course._doc, count: item.count }));
+  const price = courses.reduce((acc, item) => acc + item.count * item.price, 0);
   
   res.render('card', {
+    price,
+    courses,
     title: 'Корзина',
     isCard: true,
-    courses: courses,
-    price: card.price,
   })
 })
 
