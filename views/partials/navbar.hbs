@@ -30,6 +30,13 @@
         {{/if}}
           <a href="/card">Корзина</a>
         </li>
+        {{#if isOrders }}
+        <li class="active">
+          {{else}}
+        <li>
+          {{/if}}
+          <a href="/orders">Заказы</a>
+        </li>
       </ul>
     </div>
   </nav>
