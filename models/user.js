@@ -40,7 +40,22 @@ user.methods.addToCart = function(course) {
     })
   }
 
-  console.log(items, course);
+  this.cart.items = items;
+  return this.save();
+}
+
+user.methods.removeFromCart = function(id) {
+  if (!id) return;
+
+  let items = [...this.cart.items];
+  const idx = items.findIndex(item => item.course.toString() === id);
+
+  if (items[idx].count > 1) {
+    items[idx].count--;
+  } else {
+    items = items.filter(item => item.course.toString() !== id)
+  }
+
   this.cart.items = items;
   return this.save();
 }

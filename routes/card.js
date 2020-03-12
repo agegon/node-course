@@ -3,6 +3,17 @@ const router = Router();
 
 const Course = require('../models/course');
 
+const createCartData = async (reqUser) => {
+  const user = await reqUser
+    .populate('cart.items.course')
+    .execPopulate();
+
+  const courses = user.cart.items.map(item => ({ ...item.course._doc, count: item.count }));
+  const price = courses.reduce((acc, item) => acc + item.count * item.price, 0);
+
+  return { courses, price };
+}
+
 router.post('/add', async (req, res) => {
   const course = await Course.findById(req.body.id);
   await req.user.addToCart(course);
@@ -10,29 +21,17 @@ router.post('/add', async (req, res) => {
 })
 
 router.delete('/:id', async (req, res) => {
-  const course = await Course.getById(req.params.id);
-  const card = await Card.remove(course);
-  const courses = await Promise.all(card.courses.map(async crs => {
-    const course = await Course.getById(crs.id);
-    if (course) {
-      course.count = crs.count;
-      return course;
-    }
-  }));
-  res.json({ ...card, courses });
+  await req.user.removeFromCart(req.params.id);
+  const data = await createCartData(req.user);
+
+  res.status(200).json(data);
 })
 
 router.get('/', async (req, res) => {
-  const user = await req.user
-    .populate('cart.items.course')
-    .execPopulate();
+  const data = await createCartData(req.user);
 
-  const courses = user.cart.items.map(item => ({ ...item.course._doc, count: item.count }));
-  const price = courses.reduce((acc, item) => acc + item.count * item.price, 0);
-  
   res.render('card', {
-    price,
-    courses,
+    ...data,
     title: 'Корзина',
     isCard: true,
   })
