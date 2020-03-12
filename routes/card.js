@@ -8,7 +8,11 @@ const createCartData = async (reqUser) => {
     .populate('cart.items.course')
     .execPopulate();
 
-  const courses = user.cart.items.map(item => ({ ...item.course._doc, count: item.count }));
+  const courses = user.cart.items.map(item => ({ 
+    ...item.course._doc, 
+    id: item.course._id, 
+    count: item.count 
+  }));
   const price = courses.reduce((acc, item) => acc + item.count * item.price, 0);
 
   return { courses, price };
