@@ -12,11 +12,9 @@ const order = new Schema({
     }
   }],
   user: {
-    type: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    }
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
   },
   created: {
     type: Date,
