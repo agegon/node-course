@@ -1,21 +1,23 @@
 <nav>
-    <div class="nav-wrapper blue blue-darken-4">
-      <a href="/" class="brand-logo">Courses</a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
-        {{#if isHome }}
-          <li class="active">
-        {{else}}
-          <li>
-        {{/if}}
-          <a href="/">Главная</a>
-        </li>
-        {{#if isCourses }}
-          <li class="active">
-        {{else}}
-          <li>
-        {{/if}}
-          <a href="/courses">Курсы</a>
-        </li>
+  <div class="nav-wrapper blue blue-darken-4">
+    <a href="/" class="brand-logo">Courses</a>
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+      {{#if isHome }}
+        <li class="active">
+      {{else}}
+        <li>
+      {{/if}}
+        <a href="/">Главная</a>
+      </li>
+      {{#if isCourses }}
+        <li class="active">
+      {{else}}
+        <li>
+      {{/if}}
+        <a href="/courses">Курсы</a>
+      </li>
+
+      {{#if isAuth}}
         {{#if isAdd }}
           <li class="active">
         {{else}}
@@ -31,12 +33,24 @@
           <a href="/card">Корзина</a>
         </li>
         {{#if isOrders }}
-        <li class="active">
-          {{else}}
-        <li>
-          {{/if}}
+          <li class="active">
+        {{else}}
+          <li>
+        {{/if}}
           <a href="/orders">Заказы</a>
         </li>
-      </ul>
-    </div>
-  </nav>
+        <li>
+          <a href="/logout">Выйти</a>
+        </li>
+      {{else}}
+        {{#if isLogin }}
+          <li class="active">
+        {{else}}
+          <li>
+        {{/if}}
+          <a href="/login">Войти</a>
+        </li>
+      {{/if}}
+    </ul>
+  </div>
+</nav>

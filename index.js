@@ -2,6 +2,7 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const path = require('path');
 const mongoose = require('mongoose');
+const session = require('express-session');
 
 const routes = require('./routes');
 
@@ -18,6 +19,17 @@ app.set('view engine', 'hbs');
 app.set('views', 'views');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
+
+app.use(session({
+  secret: 'some secret value',
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use((req, res, next) => {
+  res.locals.isAuth = req.session.isAuthenticated;
+  next();
+})
 
 app.use(async (req, res, next) => {
   try {
