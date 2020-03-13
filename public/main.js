@@ -68,3 +68,6 @@ $deleteBtn.forEach(elem =>
     }
   )
 );
+
+
+const instance = M.Tabs.init(document.querySelectorAll('.tabs'));

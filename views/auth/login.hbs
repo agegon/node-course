@@ -1,0 +1,47 @@
+<div class="auth">
+  <div class="row">
+    <div class="col s12">
+      <ul class="tabs">
+        <li class="tab col s6"><a class="active" href="#login">Войти</a></li>
+        <li class="tab col s6"><a href="#register">Регистрация</a></li>
+      </ul>
+    </div>
+    <div id="login" class="col s12 l6 offset-l3">
+      <h3>Войти в магазин</h3>
+      <form action="/login" method="POST">
+        <div class="input-field">
+          <input id="email" name="email" type="text" class="validate" required>
+          <label for="email">Email</label>
+          <span class="helper-text" data-error="Введите email"></span>
+        </div>
+        <div class="input-field">
+          <input id="password" name="password" type="password" class="validate" required>
+          <label for="password">Пароль</label>
+          <span class="helper-text" data-error="Введите пароль"></span>
+        </div>
+        <button class="btn btn-primary" type="submit">Войти</button>
+      </form>
+    </div>
+    <div id="register" class="col s12 l6 offset-l3">
+      <h3>Создать аккаунт</h3>
+      <form action="/register" method="POST">
+        <div class="input-field">
+          <input id="email" name="email" type="text" class="validate" required>
+          <label for="email">Email</label>
+          <span class="helper-text" data-error="Введите email"></span>
+        </div>
+        <div class="input-field">
+          <input id="password" name="password" type="password" class="validate" required>
+          <label for="password">Пароль</label>
+          <span class="helper-text" data-error="Введите пароль"></span>
+        </div>
+        <div class="input-field">
+          <input id="passwordConfirm" name="passwordConfirm" type="password" class="validate" required>
+          <label for="passwordConfirm">Повторите пароль</label>
+          <span class="helper-text" data-error="Повторите пароль"></span>
+        </div>
+        <button class="btn btn-primary" type="submit">Зарегистрироваться</button>
+      </form>
+    </div>
+  </div>
+</div>
