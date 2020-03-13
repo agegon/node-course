@@ -6,8 +6,6 @@ const session = require('express-session');
 
 const routes = require('./routes');
 
-const User = require('./models/user');
-
 const app = express();
 const hbs = exphbs.create({
   defaultLayout: 'main',
@@ -31,15 +29,6 @@ app.use((req, res, next) => {
   next();
 })
 
-app.use(async (req, res, next) => {
-  try {
-    const user = await User.findById('5e676785260eda31ac1b40a7');
-    req.user = user;
-    next();
-  } catch (err) {
-    console.log(err);
-  }
-});
 app.use(routes);
 
 async function start() {
@@ -50,19 +39,6 @@ async function start() {
       useFindAndModify: false, 
       useUnifiedTopology: true 
     });
-
-    const user = await User.findOne();
-    if (!user) {
-      const newUser = new User({
-        email: 'example@email.com',
-        name: 'User',
-        card: {
-          items: []
-        }
-      })
-
-      await newUser.save();
-    }
 
     const db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
