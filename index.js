@@ -3,6 +3,7 @@ const exphbs = require('express-handlebars');
 const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoStore = require('connect-mongodb-session')(session);
 
 const routes = require('./routes');
 
@@ -11,6 +12,11 @@ const hbs = exphbs.create({
   defaultLayout: 'main',
   extname: 'hbs'
 })
+const MONGO_URL = 'mongodb://localhost:27017/courses_shop';
+const store = new MongoStore({
+  collection: 'sessions',
+  uri: MONGO_URL,
+});
 
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
@@ -19,6 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
+  store,
   secret: 'some secret value',
   resave: false,
   saveUninitialized: false
@@ -33,8 +40,7 @@ app.use(routes);
 
 async function start() {
   try {
-    const url = 'mongodb://localhost:27017/courses_shop';
-    await mongoose.connect(url, { 
+    await mongoose.connect(MONGO_URL, { 
       useNewUrlParser: true,
       useFindAndModify: false, 
       useUnifiedTopology: true 
