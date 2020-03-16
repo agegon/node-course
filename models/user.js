@@ -7,21 +7,30 @@ const user = new Schema({
   },
   name: {
     type: String,
-    required: true
+    //required: true
+  },
+  password: {
+    type: String,
+    required: true,
   },
   cart: {
-    items: [{
-      count: {
-        type: Number,
-        required: true,
-        default: 1,
-      },
-      course: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: 'Course'
-      }
-    }]
+    type: {
+      items: [{
+        count: {
+          type: Number,
+          required: true,
+          default: 1,
+        },
+        course: {
+          type: Schema.Types.ObjectId,
+          required: true,
+          ref: 'Course'
+        }
+      }]
+    },
+    default: {
+      items: [],
+    }
   }
 })
 
