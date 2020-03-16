@@ -12,14 +12,19 @@ router.get('/login', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   try {
-    const user = await User.findById('5e676785260eda31ac1b40a7');
-    req.session.isAuthenticated = true;
-    req.session.user = user;
+    const { email, password } = req.body;
+    const candidate = await User.findOne({ email });
+    if (candidate && password === candidate.password) {
+      req.session.isAuthenticated = true;
+      req.session.user = candidate;
 
-    req.session.save(err => {
-      if (err) throw err;
-      res.redirect('/');
-    });
+      req.session.save(err => {
+        if (err) throw err;
+        res.redirect('/');
+      });
+    } else {
+      res.redirect('/login');
+    }
   } catch (err) {
     console.log(err);
   }
