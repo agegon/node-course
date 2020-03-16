@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const router = Router();
 
+const auth = require('../middleware/auth');
 const Course = require('../models/course');
 
 const createCartData = async (reqUser) => {
@@ -18,20 +19,20 @@ const createCartData = async (reqUser) => {
   return { courses, price };
 }
 
-router.post('/add', async (req, res) => {
+router.post('/add', auth, async (req, res) => {
   const course = await Course.findById(req.body.id);
   await req.user.addToCart(course);
   res.redirect('/card');
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
   await req.user.removeFromCart(req.params.id);
   const data = await createCartData(req.user);
 
   res.status(200).json(data);
 })
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   const data = await createCartData(req.user);
 
   res.render('card', {
