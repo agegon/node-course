@@ -6,6 +6,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongodb-session')(session);
 
 const routes = require('./routes');
+const userMiddleware = require('./middleware/user');
 
 const app = express();
 const hbs = exphbs.create({
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
   next();
 })
 
+app.use(userMiddleware);
 app.use(routes);
 
 async function start() {
