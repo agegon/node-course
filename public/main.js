@@ -26,9 +26,10 @@ const $card = document.querySelector('#card');
 if ($card) {
   $card.addEventListener('click', ({ target }) => {
     if (target.classList.contains('js-remove')) {
-      const { id } = target.dataset;
+      const { id, csrf } = target.dataset;
+
       if (id) {
-        fetch(`/card/${id}`, { method: 'delete' })
+        fetch(`/card/${id}`, { method: 'delete', headers: { 'csrf-token': csrf } })
           .then(res => res.json())
           .then(card => {
             if (card.courses.length > 0) {
@@ -55,9 +56,10 @@ const $deleteBtn = document.querySelectorAll('.delete-course');
 $deleteBtn.forEach(elem => 
   elem.addEventListener('click',
     ({ target }) => {
-      const { id } = target.dataset;
+      const { id, csrf } = target.dataset;
+
       if (id) {
-        fetch(`/courses/${id}`, { method: 'delete' })
+        fetch(`/courses/${id}`, { method: 'delete', headers: { 'csrf-token': csrf }})
           .then(res => res.json())
           .then(res => {
             console.log(res);

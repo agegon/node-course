@@ -1,5 +1,20 @@
 const { Schema, model } = require('mongoose');
 
+const cart = new Schema({
+  items: [{
+    count: {
+      type: Number,
+      required: true,
+      default: 1,
+    },
+    course: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'Course'
+    }
+  }]
+});
+
 const user = new Schema({
   email: {
     type: String,
@@ -14,20 +29,7 @@ const user = new Schema({
     required: true,
   },
   cart: {
-    type: {
-      items: [{
-        count: {
-          type: Number,
-          required: true,
-          default: 1,
-        },
-        course: {
-          type: Schema.Types.ObjectId,
-          required: true,
-          ref: 'Course'
-        }
-      }]
-    },
+    type: cart,
     default: {
       items: [],
     }

@@ -3,10 +3,12 @@ const exphbs = require('express-handlebars');
 const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const csurf = require('csurf');
 const MongoStore = require('connect-mongodb-session')(session);
 
 const routes = require('./routes');
 const userMiddleware = require('./middleware/user');
+const variablesMiddleware = require('./middleware/variables');
 
 const app = express();
 const hbs = exphbs.create({
@@ -32,11 +34,8 @@ app.use(session({
   saveUninitialized: false
 }));
 
-app.use((req, res, next) => {
-  res.locals.isAuth = req.session.isAuthenticated;
-  next();
-})
-
+app.use(csurf());
+app.use(variablesMiddleware);
 app.use(userMiddleware);
 app.use(routes);
 

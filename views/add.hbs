@@ -24,7 +24,8 @@
     <input id="img" name="img" type="text" class="validate" value="{{img}}">
     <label for="img">Url картинки</label>
   </div>
+  <input type="hidden" name="_csrf" value="{{@root.csrf}}">
   <button class="btn btn-primary" type="submit">Сохранить</button>
-  <button class="btn red delete-course" data-id="{{id}}" >Удалить</button>
+  <button class="btn red delete-course" data-id="{{id}}" data-csrf="{{@root.csrf}}">Удалить</button>
 </form>
 {{/with}}
