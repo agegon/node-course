@@ -20,6 +20,9 @@
           <span class="helper-text" data-error="Введите пароль"></span>
         </div>
         <input type="hidden" name="_csrf" value="{{csrf}}">
+        {{#if loginError}}
+          <p class="alert">{{loginError}}</p>
+        {{/if}}
         <button class="btn btn-primary" type="submit">Войти</button>
       </form>
     </div>
@@ -47,6 +50,9 @@
           <span class="helper-text" data-error="Повторите пароль"></span>
         </div>
         <input type="hidden" name="_csrf" value="{{csrf}}">
+        {{#if registerError}}
+          <p class="alert">{{registerError}}</p>
+        {{/if}}
         <button class="btn btn-primary" type="submit">Зарегистрироваться</button>
       </form>
     </div>

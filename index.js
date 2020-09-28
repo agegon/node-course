@@ -4,6 +4,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const csurf = require('csurf');
+const flash = require('connect-flash');
 const MongoStore = require('connect-mongodb-session')(session);
 
 const routes = require('./routes');
@@ -35,6 +36,7 @@ app.use(session({
 }));
 
 app.use(csurf());
+app.use(flash());
 app.use(variablesMiddleware);
 app.use(userMiddleware);
 app.use(routes);

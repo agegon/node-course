@@ -7,7 +7,9 @@ const User = require('../models/user');
 router.get('/login', async (req, res) => {
   res.render('auth/login', {
     title: 'Авторизация',
-    isLogin: true
+    isLogin: true,
+    loginError: req.flash('loginError'),
+    registerError: req.flash('registerError'),
   })
 });
 
@@ -26,6 +28,7 @@ router.post('/login', async (req, res) => {
         res.redirect('/');
       });
     } else {
+      req.flash('loginError', 'Такого пользователя не существует');
       res.redirect('/login');
     }
   } catch (err) {
@@ -45,6 +48,7 @@ router.post('/register', async (req, res) => {
     const candidate = await User.findOne({ email });
 
     if (candidate) {
+      req.flash('registerError', 'Пользователь с таким email уже зарегистрирован');
       res.redirect('/login#register');
     } else if (password !== passwordConfirm) {
       res.redirect('/login#register');

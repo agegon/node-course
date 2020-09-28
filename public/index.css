@@ -35,3 +35,12 @@
 .auth {
   padding-top: 1rem;
 }
+
+.alert {
+  padding: .5rem 1rem;
+  text-align: center;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  background: rgba(255, 0, 0, 0.3);
+  color: red;
+}
