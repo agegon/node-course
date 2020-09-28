@@ -10,16 +10,17 @@ const MongoStore = require('connect-mongodb-session')(session);
 const routes = require('./routes');
 const userMiddleware = require('./middleware/user');
 const variablesMiddleware = require('./middleware/variables');
+const keys = require('./keys');
 
 const app = express();
 const hbs = exphbs.create({
   defaultLayout: 'main',
   extname: 'hbs'
 })
-const MONGO_URL = 'mongodb://localhost:27017/courses_shop';
+
 const store = new MongoStore({
   collection: 'sessions',
-  uri: MONGO_URL,
+  uri: keys.MONGO_URL,
 });
 
 app.engine('hbs', hbs.engine);
@@ -30,7 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
   store,
-  secret: 'some secret value',
+  secret: keys.SESSION_SECRET,
   resave: false,
   saveUninitialized: false
 }));
@@ -43,7 +44,7 @@ app.use(routes);
 
 async function start() {
   try {
-    await mongoose.connect(MONGO_URL, { 
+    await mongoose.connect(keys.MONGO_URL, { 
       useNewUrlParser: true,
       useFindAndModify: false, 
       useUnifiedTopology: true 
