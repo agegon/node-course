@@ -1,10 +1,12 @@
 const { Router } = require('express');
 const bcrypt = require('bcryptjs');
 const mailgun = require('mailgun-js');
+const crypto = require('crypto');
 
 const User = require('../models/user');
 const keys = require('../keys');
-const createRegMail = require('../emails/registation');
+const createRegMail = require('../emails/registration');
+const createResetMail = require('../emails/resetEmail');
 
 const mailgunMessages = mailgun({
   apiKey: keys.MAILGUN_API_KEY,
@@ -76,5 +78,44 @@ router.post('/register', async (req, res) => {
     console.log(err);
   }
 });
+
+router.get('/reset', (req, res) => {
+  res.render('auth/reset', {
+    title: 'Забыли пароль?',
+    error: req.flash('error'),
+  });
+})
+
+router.post('/reset', async (req, res) => {
+  try {
+    const token = await new Promise((resolve, reject) => 
+      crypto.randomBytes(32, (err, buffer) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(buffer.toString('hex'));
+      })
+    );
+
+    const candidate = await User.findOne({ email: req.body.email });
+
+    if (candidate) {
+      candidate.resetToken = token;
+      candidate.resetTokenExp = Date.now() + 60 * 60 * 1000;
+      await candidate.save();
+      await mailgunMessages.send(createResetMail(candidate.email, token));
+      res.redirect('/login');
+    } else {
+      const err = new Error();
+      err.text = 'Пользователь не найден'
+      throw err;
+    }
+  } catch (err) {
+    const message = (err && err.text) || 'Что-то пошло не так, повторите попытку позже';
+    req.flash('error', message);
+    res.redirect('/reset');
+    console.log(err);
+  }
+})
 
 module.exports = router;

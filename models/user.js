@@ -33,7 +33,9 @@ const user = new Schema({
     default: {
       items: [],
     }
-  }
+  },
+  resetToken: String,
+  resetTokenExp: Date,
 })
 
 user.methods.addToCart = function(course) {
