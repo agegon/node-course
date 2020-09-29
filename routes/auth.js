@@ -1,8 +1,17 @@
 const { Router } = require('express');
-const router = Router();
 const bcrypt = require('bcryptjs');
+const mailgun = require('mailgun-js');
 
 const User = require('../models/user');
+const keys = require('../keys');
+const createRegMail = require('../emails/registation');
+
+const mailgunMessages = mailgun({
+  apiKey: keys.MAILGUN_API_KEY,
+  domain: keys.MAILGUN_DOMAIN,
+}).messages();
+
+const router = Router();
 
 router.get('/login', async (req, res) => {
   res.render('auth/login', {
@@ -60,7 +69,8 @@ router.post('/register', async (req, res) => {
         password: hash,
       });
       await user.save();
-      res.redirect('/login');
+      res.redirect('/login#login');
+      await mailgunMessages.send(createRegMail(email));
     }
   } catch (err) {
     console.log(err);
