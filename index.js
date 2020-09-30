@@ -15,7 +15,8 @@ const keys = require('./keys');
 const app = express();
 const hbs = exphbs.create({
   defaultLayout: 'main',
-  extname: 'hbs'
+  extname: 'hbs',
+  helpers: require('./utils/hbs'),
 })
 
 const store = new MongoStore({

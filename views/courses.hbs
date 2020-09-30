@@ -16,7 +16,9 @@
             <div>
               <a href="/courses/{{id}}">Подробнее</a>
               {{#if @root.isAuth}}
-                <a href="/courses/{{id}}/edit?allow=true">Редактировать</a>
+                {{#ifeq user._id @root.userId}}
+                  <a href="/courses/{{id}}/edit?allow=true">Редактировать</a>
+                {{/ifeq}}
               {{/if}}
             </div>
             {{#if @root.isAuth}}
