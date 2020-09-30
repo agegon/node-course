@@ -125,7 +125,7 @@ router.get('/recover/:token', async (req, res) => {
 
   try {
     const user = await User.findOne({ 
-      resetToken: token,
+      resetToken: req.params.token,
       resetTokenExp: { $gt: Date.now() },
     });
 
@@ -139,6 +139,30 @@ router.get('/recover/:token', async (req, res) => {
       userId: user._id.toString(),
       token: req.params.token,
     });    
+
+  } catch (err) {
+    console.log(err);
+  }
+})
+
+router.post('/recover', async (req, res) => {
+  try {
+    const user = await User.findOne({ 
+      _id: req.body.userId,
+      resetToken: req.body.token,
+      resetTokenExp: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.redirect('/login');
+    }
+
+    user.password = await bcrypt.hash(req.body.password, 10);
+    user.resetToken = undefined;
+    user.resetTokenExp = undefined;
+    await user.save();
+
+    res.redirect('/login');
 
   } catch (err) {
     console.log(err);
