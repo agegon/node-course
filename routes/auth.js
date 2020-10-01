@@ -2,6 +2,7 @@ const { Router } = require('express');
 const bcrypt = require('bcryptjs');
 const mailgun = require('mailgun-js');
 const crypto = require('crypto');
+const { body, validationResult } = require('express-validator/check');
 
 const User = require('../models/user');
 const keys = require('../keys');
@@ -53,10 +54,17 @@ router.get('/logout', async (req, res) => {
   });
 });
 
-router.post('/register', async (req, res) => {
+router.post('/register', body('email').isEmail(), async (req, res) => {
   try {
     const { email, name, password, passwordConfirm } = req.body;
     const candidate = await User.findOne({ email });
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      req.flash('registerError', errors.array()[0].msg);
+      res.status(422).redirect('/login#register');
+      return;
+    }
 
     if (candidate) {
       req.flash('registerError', 'Пользователь с таким email уже зарегистрирован');
