@@ -4,7 +4,7 @@ const auth = require('../middleware/auth');
 
 const router = Router();
 
-const isOwner = (course, user) => course.user.toString() === user?._id.toString();
+const isOwner = (course, user) => course?.user.toString() === user?._id.toString();
 
 router.get('/', async (req, res) => {
   try {
@@ -85,25 +85,28 @@ router.post('/:id/edit', auth, async (req, res) => {
 })
 
 router.get('/:id', async (req, res) => {
-  const course = await Course.findById(req.params.id);
+  try {
+    const course = await Course.findById(req.params.id);
 
-  res.render(
-    'course',
-    {
-      title: course ? course.title : 'Курс не найден',
-      course
-    }
-  )
+    res.render(
+      'course',
+      {
+        title: course ? course.title : 'Курс не найден',
+        course
+      }
+    )
+  } catch (err) {
+    console.log(err)
+  }
 })
 
 router.delete('/:id', auth, async (req, res) => {
   try {
-    const course = await Course.findById(req.params.id);
-    if (!isOwner(course, req.user)) {
-      return res.redirect('/courses');
-    }
-    await Course.findByIdAndDelete(req.params.id);
-    res.json({ data: null });
+    await Course.deleteOne({
+      _id: req.params.id,
+      user: req.user._id,
+    });
+    res.redirect('/courses');
   } catch (err) {
     console.log(err);
   }
