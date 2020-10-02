@@ -90,7 +90,7 @@ router.post('/:id/edit', auth, courseValidators, async (req, res) => {
     if (!errors.isEmpty()) {
       return res.status('422').render('add', {
         title: 'Редактирование курса',
-        course: { title, price, img },
+        course: { title, price, img, id: req.params.id },
         error: errors.array()[0].msg,
       })
     }

@@ -10,6 +10,7 @@ const MongoStore = require('connect-mongodb-session')(session);
 const routes = require('./routes');
 const userMiddleware = require('./middleware/user');
 const variablesMiddleware = require('./middleware/variables');
+const noRouteHandler = require('./middleware/error');
 const keys = require('./keys');
 
 const app = express();
@@ -42,6 +43,8 @@ app.use(flash());
 app.use(variablesMiddleware);
 app.use(userMiddleware);
 app.use(routes);
+
+app.use(noRouteHandler);
 
 async function start() {
   try {
