@@ -2,10 +2,11 @@ const { Router } = require('express');
 const bcrypt = require('bcryptjs');
 const mailgun = require('mailgun-js');
 const crypto = require('crypto');
-const { body, validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator/check');
 
 const User = require('../models/user');
 const keys = require('../keys');
+const { registerValidators } = require('../utils/validators');
 const createRegMail = require('../emails/registration');
 const createResetMail = require('../emails/resetEmail');
 
@@ -54,10 +55,9 @@ router.get('/logout', async (req, res) => {
   });
 });
 
-router.post('/register', body('email').isEmail(), async (req, res) => {
+router.post('/register', registerValidators, async (req, res) => {
   try {
-    const { email, name, password, passwordConfirm } = req.body;
-    const candidate = await User.findOne({ email });
+    const { email, name, password } = req.body;
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -66,22 +66,15 @@ router.post('/register', body('email').isEmail(), async (req, res) => {
       return;
     }
 
-    if (candidate) {
-      req.flash('registerError', 'Пользователь с таким email уже зарегистрирован');
-      res.redirect('/login#register');
-    } else if (password !== passwordConfirm) {
-      res.redirect('/login#register');
-    } else {
-      const hash = await bcrypt.hash(password, 10);
-      const user = new User({
-        email, 
-        name, 
-        password: hash,
-      });
-      await user.save();
-      res.redirect('/login#login');
-      await mailgunMessages.send(createRegMail(email));
-    }
+    const hash = await bcrypt.hash(password, 10);
+    const user = new User({
+      email, 
+      name, 
+      password: hash,
+    });
+    await user.save();
+    res.redirect('/login#login');
+    await mailgunMessages.send(createRegMail(email));
   } catch (err) {
     console.log(err);
   }
