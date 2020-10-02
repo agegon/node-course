@@ -1,10 +1,11 @@
 const { body } = require('express-validator/check');
+
 const User = require('../models/user');
 
 exports.registerValidators = [
   body('email')
     .isEmail().withMessage('Введите корректный email')
-    .custom(async (value, { req }) => {
+    .custom(async (value) => {
       try {
         const candidate = await User.findOne({ email: value });
         if (candidate) {
@@ -28,4 +29,23 @@ exports.registerValidators = [
   body('name', 'Введите корректное имя')
     .isLength({ min: 3, max: 32 })
     .trim(),
+];
+
+exports.loginValidators = [
+  body('email')
+    .isEmail().withMessage('Введите email')
+    .normalizeEmail(),
+  body('password', 'Введите пароль')
+    .isLength({ min: 1 }),
+];
+
+exports.courseValidators = [
+  body('title')
+    .isLength({ min: 3, max: 150 }).withMessage('Длинна заголовка должна быть от 3 до 150 символов')
+    .trim(),
+  body('price')
+    .isNumeric().withMessage('Цена должна быть числом')
+    .toInt(),
+  body('img')
+    .isURL().withMessage('Введите корректный URL изображения'),
 ];

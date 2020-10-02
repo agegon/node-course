@@ -1,6 +1,9 @@
 const { Router } = require('express');
+const { validationResult } = require('express-validator/check');
+
 const Course = require('../models/course');
 const auth = require('../middleware/auth');
+const { courseValidators } = require('../utils/validators');
 
 const router = Router();
 
@@ -30,12 +33,24 @@ router.get('/add', auth, (req, res) => {
   );
 })
 
-router.post('/add', auth, async (req, res) => {
+router.post('/add', auth, courseValidators, async (req, res) => {
   try {
+    const errors = validationResult(req);
+    const { title, price, img } = req.body;
+
+    if (!errors.isEmpty()) {
+      return res.status('422').render('add', {
+        title: 'Добавить курс', 
+        isAdd: true, 
+        course: { title, price, img },
+        error: errors.array()[0].msg,
+      })
+    }
+
     const course = new Course({
-      title: req.body.title,
-      price: req.body.price,
-      img: req.body.img,
+      title,
+      price,
+      img,
       user: req.user
     });
 
@@ -67,8 +82,19 @@ router.get('/:id/edit', auth, async (req, res) => {
   }
 })
 
-router.post('/:id/edit', auth, async (req, res) => {
+router.post('/:id/edit', auth, courseValidators, async (req, res) => {
   try {
+    const errors = validationResult(req);
+    const { title, price, img } = req.body;
+
+    if (!errors.isEmpty()) {
+      return res.status('422').render('add', {
+        title: 'Редактирование курса',
+        course: { title, price, img },
+        error: errors.array()[0].msg,
+      })
+    }
+
     if (req.query.allow) {
       const course = await Course.findById(req.params.id);
       if (!isOwner(course, req.user)) {

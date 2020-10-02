@@ -25,6 +25,9 @@
     <label for="img">Url картинки</label>
   </div>
   <input type="hidden" name="_csrf" value="{{@root.csrf}}">
+  {{#if @root.error}}
+    <p class="alert">{{@root.error}}</p>
+  {{/if}}
   <button class="btn btn-primary" type="submit">Сохранить</button>
   <button class="btn red delete-course" data-id="{{id}}" data-csrf="{{@root.csrf}}">Удалить</button>
 </form>
