@@ -1,0 +1,29 @@
+<h1>Профиль</h1>
+
+<div class="row">
+  <div class="col s6">
+    <img class="avatar" src="https://miro.medium.com/max/500/0*xkJgg-6HskYrQ3N7.jpeg" alt="">
+    <p>Аватара нет</p>
+  </div>
+  <div class="col s6">
+    <form action="/profile" method="POST">>
+      <p>Ваш email: <strong>{{user.email}}</strong></p>
+      <div class="input-field">
+        <input id="name" name="name" type="text" class="validate" value="{{user.name}}" required>
+        <label for="name">Ваше имя</label>
+        <span class="helper-text" data-error="Введите имя"></span>
+      </div>
+      <div class="file-field input-field">
+        <div class="btn indigo darken-4">
+          <span>Аватар</span>
+          <input type="file" name="avatar">
+        </div>
+        <div class="file-path-wrapper">
+          <input class="file-path validate" type="text">
+        </div>
+      </div>
+      <input type="hidden" name="_csrf" value="{{@root.csrf}}">
+      <button class="btn indigo darken-4" type="submit">Изменить</button>
+    </form>
+  </div>
+</div>

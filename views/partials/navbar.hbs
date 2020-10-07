@@ -9,6 +9,7 @@
       {{/if}}
         <a href="/">Главная</a>
       </li>
+
       {{#if isCourses }}
         <li class="active">
       {{else}}
@@ -25,6 +26,15 @@
         {{/if}}
           <a href="/courses/add">Добавить курс</a>
         </li>
+
+         {{#if isProfile }}
+          <li class="active">
+        {{else}}
+          <li>
+        {{/if}}
+          <a href="/profile">Профиль</a>
+        </li>
+
         {{#if isCard }}
           <li class="active">
         {{else}}
@@ -32,6 +42,7 @@
         {{/if}}
           <a href="/card">Корзина</a>
         </li>
+
         {{#if isOrders }}
           <li class="active">
         {{else}}
@@ -39,6 +50,7 @@
         {{/if}}
           <a href="/orders">Заказы</a>
         </li>
+
         <li>
           <a href="/logout">Выйти</a>
         </li>
