@@ -16,6 +16,7 @@ const cart = new Schema({
 });
 
 const user = new Schema({
+  avatarUrl: String,
   email: {
     type: String,
     required: true
