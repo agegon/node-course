@@ -9,6 +9,7 @@ const MongoStore = require('connect-mongodb-session')(session);
 
 const routes = require('./routes');
 const userMiddleware = require('./middleware/user');
+const fileMiddleware = require('./middleware/file');
 const variablesMiddleware = require('./middleware/variables');
 const noRouteHandler = require('./middleware/error');
 const keys = require('./keys');
@@ -38,6 +39,7 @@ app.use(session({
   saveUninitialized: false
 }));
 
+app.use(fileMiddleware.single('avatar'));
 app.use(csurf());
 app.use(flash());
 app.use(variablesMiddleware);
