@@ -45,7 +45,9 @@ app.use(session({
 app.use(fileMiddleware.single('avatar'));
 app.use(csurf());
 app.use(flash());
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false,
+}));
 app.use(compression());
 app.use(variablesMiddleware);
 app.use(userMiddleware);
