@@ -30,7 +30,7 @@ router.post('/', auth, async (req, res) => {
     Object.assign(user, toChange);
     await user.save();
 
-    if (req.file) {
+    if (req.file && oldAvatarSrc) {
       await fs.unlink(path.join(process.cwd(), oldAvatarSrc)).catch((err) => console.log(err));
     }
     
